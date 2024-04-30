@@ -101,8 +101,8 @@ def searchlike(table:str,**kwargs)->list:
     return getprocess(sql)
     
 def checkfields(*args)->bool:
-    for item in args:
-        if item == '':
+    for items in args:
+        if items == '':
             return False
     return True
 
