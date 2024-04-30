@@ -1,7 +1,7 @@
 {% extends 'base_admin.html' %}
 {% block nav %}
 	<a href="{{ url_for('admin_customers') }}" class="w3-bar-item w3-left w3-button w3-hover-white">CUSTOMERS</a>
-	<a href="{{ url_for('admin_items') }}" class="w3-bar-item w3-left w3-button w3-hover-white" style="font-weight: bold">ITEMS</a>
+	<a href="{{ url_for('admin_items') }}" class="w3-bar-item w3-left w3-button w3-hover-white" style="font-weight: bold">MENU</a>
 {% endblock %}
 {% block content %}
 
@@ -108,7 +108,5 @@
 		</div>
 	  </div>
 	</div>
-	<div class="center">
-		<img width="1000px" src="{{ url_for('static',filename='pictures/Menu.png') }}">
-	</div>
+	<img width="1000px" class="center" src="{{ url_for('static',filename='pictures/Menu.png') }}">
 {% endblock %}

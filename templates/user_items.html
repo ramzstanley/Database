@@ -1,6 +1,6 @@
 {% extends 'base_user.html' %}
 {% block nav %}
-	<a href="{{ url_for('user_items') }}" class="w3-bar-item w3-left w3-button w3-hover-white" style="font-weight: bold">ITEMS</a>
+	<a href="{{ url_for('user_items') }}" class="w3-bar-item w3-left w3-button w3-hover-white" style="font-weight: bold">MENU</a>
 	<a href="{{ url_for('user_orders') }}" class="w3-bar-item w3-left w3-button w3-hover-white">ORDERS</a>
 	<a href="{{ url_for('user_cart') }}" class="w3-bar-item w3-left w3-button w3-hover-white">CART</a>
 {% endblock %}
@@ -69,7 +69,7 @@
 									<p>PRICE:</p>
 								</div>
 								<div style="padding-right: 80px;">
-									<p>{{ item['name'] }}</p>
+									<p>{{ item['title'] }}</p>
 									<p>&#x20B1; {{ item['price'] }}</p>
 								</div>
 								<div style="margin-top: 15px;width: 400px;">

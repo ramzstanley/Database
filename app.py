@@ -163,8 +163,8 @@ def user_searchitem():
             keyword = request.form['search'].strip()
             valid = checkfields(keyword)
             if valid:
-                head = ['title','author','genre','price','type']
-                rows = searchlike('Items',title=keyword,author=keyword,genre=keyword,price=keyword,i_type=keyword)
+                head = ['title','price']
+                rows = searchlike('Items',title=keyword,price=keyword)
                 return render_template("user_items.html",title="user",header=head,itemlist=rows,search=keyword)
             else:
                 return redirect(url_for('user_items'))
@@ -201,8 +201,8 @@ def searchitem()->None:
             keyword = request.form['search'].strip()
             valid = checkfields(keyword)
             if valid:
-                head = ['isbn','title','author','genre','price','type']
-                rows = searchlike('Items',ISBN=keyword,title=keyword,author=keyword,genre=keyword,price=keyword,i_type=keyword)
+                head = ['title','price']
+                rows = searchlike('Items',title=keyword,price=keyword)
                 return render_template("admin_items.html",title="admin",header=head,itemlist=rows,search=keyword)
             else:
                 return redirect(url_for('admin_items'))
