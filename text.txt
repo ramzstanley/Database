@@ -1,0 +1,84 @@
+get item id
+i_id
+
+place order
+o_date
+ship_address
+c_id
+
+get order id and link
+o_id
+i_id
+qty
+
+inputs
+ship_address
+qty
+
+
+#orders table
+
+title
+author
+genre
+price
+i_type
+
+#view
+qty
+o_date
+ship_address
+total
+
+#fields need to get orders
+
+SELECT I.title, I.author, I.genre, I.price, I.i_type, IO.qty, O.o_date, O.ship_address, (IO.qty * I.price) AS total FROM Items I INNER JOIN ItemsOrdered IO ON I.i_id = IO.i_id INNER JOIN Orders O ON IO.o_id = O.o_id INNER JOIN Customer C ON O.c_id = C.c_id WHERE C.c_id = 1;
+
+
+#adding to cart
+get cart_id (or c_id)
+get i_id
+get qty
+
+
+
+#ordering from cart
+get i_id thru ic_id
+
+place order
+	o_date
+	ship_address
+	c_id
+
+get order id and link
+	o_id
+	i_id
+	qty
+
+remove from ItemsInCart
+	remove thru ic_id
+
+#get items in cart
+IC.cart_id
+IC.ic_id
+I.i_id
+IC.qty
+I.ISBN
+I.title
+I.author
+I.genre
+I.price
+I.i_type
+
+SELECT (IC.qty * I.price) AS total, C.cart_id, IC.ic_id, I.i_id, IC.qty, I.ISBN, I.title, I.author, I.genre, I.price, I.i_type FROM Cart C INNER JOIN ItemsInCart IC ON C.cart_id = IC.cart_id INNER JOIN Items I ON IC.i_id = I.i_id WHERE C.cart_id = 1;
+
+
+SELECT 
+
+
+
+<input style="width:100px" type="number" name="qty" id="qty_{{ item['ic_id'] }}" min="1" value="{{ item['qty'] }}" oninput="document.getElementById('subtotal_{{ item['ic_id'] }}').innerText = (document.getElementById('qty_{{ item['ic_id'] }}').value * parseFloat('{{ item['price'] }}')).toFixed(2)">
+
+
+
+

@@ -1,0 +1,76 @@
+{% extends 'base_user.html' %}
+{% block nav %}
+	<a href="{{ url_for('user_items') }}" class="w3-bar-item w3-left w3-button w3-hover-white">ITEMS</a>
+	<a href="{{ url_for('user_orders') }}" class="w3-bar-item w3-left w3-button w3-hover-white" style="font-weight: bold">ORDERS</a>
+	<a href="{{ url_for('user_cart') }}" class="w3-bar-item w3-left w3-button w3-hover-white">CART</a>
+{% endblock %}
+{% block content %}
+	
+	{% with messages = get_flashed_messages() %}
+		{% if messages %}
+			{% for message in messages %}
+				<div id="flashMessage" class="w3-panel w3-amber w3-container w3-padding" onclick="document.getElementById('flashMessage').style.display='none'">{{ message }}</div>
+			{% endfor %}
+		{% endif %}
+	{% endwith %}
+	<div class="w3-responsive">
+	<table class="w3-table-all w3-card-4 w3-animate-top w3-hoverable">
+		<tr class="w3-pink">
+			{% for h in header %}
+				<th>{{ h | upper }}</th>
+			{% endfor %}
+			<th></th>
+		</tr>
+		{% for item in orderlist %}
+			<tr>
+				<td>{{ item['title'] }}</td>
+				<td>&#x20B1; {{ item['price'] }}</td>
+				<td>{{ item['qty'] }}</td>
+				<td>{{ item['total'] }}</td>
+				<td>
+					<button style="cursor:pointer;border:none" onclick="document.getElementById('orderdetailsmodal_{{ item['o_id'] }}').style.display='block'">
+						<img width="20px" src="{{ url_for('static',filename='icons/eye.png') }}">
+					</button>
+				</td>
+				<!-- Order Details Modal -->
+				<div id="orderdetailsmodal_{{ item['o_id'] }}" class="w3-modal">
+				  <div class="w3-modal-content w3-animate-top">
+					<div class="w3-container w3-green">
+					  <h3>ORDER DETAILS</h3>
+					  <span onclick="document.getElementById('orderdetailsmodal_{{ item['o_id'] }}').style.display='none'"
+					  class="w3-button w3-display-topright">&times;</span>
+					</div>
+					
+					<div class="w3-container w3-padding-16">
+						<div style="display: flex;justify-content: center;">
+							<div style="padding-right: 10px;">
+								<p>NO:</p>
+								<p>TITLE:</p>
+								<p>PRICE:</p>
+							</div>
+							<div style="padding-right: 100px">
+								<p>{{ item['isbn'] }}</p>
+								<p>{{ item['title'] }}</p>
+								<p>&#x20B1; {{ item['price'] }}</p>
+							</div>
+							<div style="padding-right: 10px;">
+								<p>ORDER DATE:</p>
+								<p>SHIP ADDRESS:</p>
+								<p>QUANTITY:</p>
+								<p>TOTAL:</p>
+							</div>
+							<div>
+								<p>{{ item['o_date'] }}</p>
+								<p>{{ item['ship_address'] }}</p>
+								<p>{{ item['qty'] }}</p>
+								<p>&#x20B1; {{ item['total'] }}</p>
+							</div>
+						</div>
+					</div>
+				  </div>
+				</div>
+			</tr>
+		{% endfor%}
+	</table>
+	</div>
+{% endblock %}

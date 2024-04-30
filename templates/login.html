@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block menu %}
+	<a href="{{ url_for('register') }}" class="w3-bar-item w3-right w3-button w3-hover-white">REGISTER</a>
+	<a href="{{ url_for('login') }}" class="w3-bar-item w3-right w3-button w3-hover-white" style="font-weight: bold">LOGIN</a>
+	<h3> SIZZLING CITY </h3>
+{% endblock %}
+{% block content %}
+	{% with messages = get_flashed_messages() %}
+		{% if messages %}
+			{% for message in messages %}
+				<div id="flashMessage" class="w3-panel w3-green w3-container w3-padding" onclick="document.getElementById('flashMessage').style.display='none'">{{ message }}</div>
+			{% endfor%}
+		{% endif%}
+	{% endwith%}
+
+	<div class="w3-mobile w3-animate-top w3-card-4 w3-container w3-padding-16" style="width:40%;margin:auto">
+		<div class="w3-container w3-center">
+			<h2><b>LOGIN</b><h2>
+		</div>
+		<form action="login" method="post">
+			<p>
+				<label><b>USERNAME</b></label>
+				<input type="text" name="username" id="username" class="w3-input w3-border">
+			</p>
+			<p>
+				<label><b>PASSWORD</b></label>
+				<input type="password" name="password" id="password" class="w3-input w3-border">
+			</p>
+			<p>
+				<br>
+				<input type="submit" value="LOGIN" class="w3-button w3-right w3-black" style="width:100px">
+				<br>
+			</p>
+		</form>
+	</div>
+{% endblock %}

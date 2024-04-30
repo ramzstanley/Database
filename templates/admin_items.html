@@ -1,0 +1,114 @@
+{% extends 'base_admin.html' %}
+{% block nav %}
+	<a href="{{ url_for('admin_customers') }}" class="w3-bar-item w3-left w3-button w3-hover-white">CUSTOMERS</a>
+	<a href="{{ url_for('admin_items') }}" class="w3-bar-item w3-left w3-button w3-hover-white" style="font-weight: bold">ITEMS</a>
+{% endblock %}
+{% block content %}
+
+	{% with messages = get_flashed_messages() %}
+		{% if messages %}
+			{% for message in messages %}
+				<div id="flashMessage" class="w3-panel w3-amber w3-container w3-padding" onclick="document.getElementById('flashMessage').style.display='none'">{{ message }}</div>
+			{% endfor %}
+		{% endif %}
+	{% endwith %}
+
+	<div>
+		<button style="display:inline" class="w3-button w3-black" onclick="document.getElementById('addmodal').style.display='block'">+ ADD</button>
+		<form method="post" action="/admin/items/search" style="display:inline" class="w3-right">
+			<input type="text" name="search" id="search" class="w3-input" placeholder="Enter Keyword" style="width:250px;display:inline;" required>
+			<input type="submit" value="SEARCH" class="w3-button w3-black">
+		</form>
+	</div>
+	
+	{% if search != None %}
+		<br>
+		<script>
+			document.getElementById('search').value = "{{ search }}";
+		</script>
+		<div class="w3-container" style="padding:0">
+			<button onclick="location.href = '/admin/items'" class="w3-button w3-right w3-black" style="width:95px">CLEAR</button>
+		</div>
+	{% endif %}
+	<br>
+	
+	<button style="display:inline" class="w3-button w3-black" onclick="location.href = '/generateSales'">Generate Reports</button>
+	<br><br>
+	<div class="w3-responsive">
+	<table class="w3-table-all w3-card-4 w3-animate-top w3-hoverable">
+		<tr class="w3-black">
+			{% for h in header %}
+				<th>{{ h | upper }}</th>
+			{% endfor %}
+			<th></th>
+		</tr>
+		{% for item in itemlist %}
+			<tr>
+				<td>{{ item['title'] }}</td>
+				<td>&#x20B1; {{ item['price'] }}</td>
+				<td>
+					<button style="cursor:pointer;border:none" onclick="deleteitem('{{ item['i_id'] }}')">
+						<img width="20px" src="{{ url_for('static',filename='icons/delete.png') }}">
+					</button>
+					<button style="cursor:pointer;border:none" onclick="document.getElementById('updatemodal_{{ item['i_id'] }}').style.display='block'">
+						<img width="20px" src="{{ url_for('static',filename='icons/edit.png') }}">
+					</button>
+				</td>
+				<td></td>
+				<!-- Update Modal -->
+				<div id="updatemodal_{{ item['i_id'] }}" class="w3-modal">
+				  <div class="w3-modal-content w3-animate-top">
+					<div class="w3-container w3-black">
+					  <h3>UPDATE ITEM</h3>
+					  <span onclick="document.getElementById('updatemodal_{{ item['i_id'] }}').style.display='none'"
+					  class="w3-button w3-display-topright">&times;</span>
+					</div>
+					
+					<div class="w3-container w3-padding-16">
+						<form method="post" action="/admin/updateitem/{{ item['i_id'] }}">
+							<label>TITLE</label>
+							<input type="text" name="title" id="title" class="w3-input w3-border" value="{{ item['title'] }}" required>
+							<label>PRICE</label>
+							<input type="number" name="price" id="price" min=1 step="any" class="w3-input w3-border" value="{{ item['price'] }}" required>
+							<script>
+								document.querySelectorAll('[data-selected]').forEach(e => {e.value = e.dataset.selected});
+							</script>
+
+							<br>
+							<input type="submit" value="UPDATE" class="w3-button w3-black w3-right">
+							<br><br>
+
+						</form>
+					</div>
+				  </div>
+				</div>
+			</tr>
+		{% endfor%}
+	</table>
+	</div>
+	<!-- Add Modal -->
+	<div id="addmodal" class="w3-modal">
+	  <div class="w3-modal-content w3-animate-top">
+		<div class="w3-container w3-black">
+		  <h3>ADD ITEM</h3>
+		  <span onclick="document.getElementById('addmodal').style.display='none'"
+		  class="w3-button w3-display-topright">&times;</span>
+		</div>
+		<div class="w3-container w3-padding-16">
+			<form method="post" action="/admin/additem">
+				<label>TITLE</label>
+				<input type="text" name="title" id="title" class="w3-input w3-border" required>
+				<label>PRICE</label>
+				<input type="number" name="price" id="price" min=1 step="any" class="w3-input w3-border" required>
+				<br>
+				<input type="submit" value="ADD" class="w3-button w3-black w3-right">
+				<br><br>
+
+			</form>
+		</div>
+	  </div>
+	</div>
+	<div class="center">
+		<img width="1000px" src="{{ url_for('static',filename='pictures/Menu.png') }}">
+	</div>
+{% endblock %}

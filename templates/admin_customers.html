@@ -1,0 +1,120 @@
+{% extends 'base_admin.html' %}
+{% block nav %}
+	<a href="{{ url_for('admin_customers') }}" class="w3-bar-item w3-left w3-button w3-hover-white" style="font-weight: bold">CUSTOMERS</a>
+	<a href="{{ url_for('admin_items') }}" class="w3-bar-item w3-left w3-button w3-hover-white">ITEMS</a>
+{% endblock %}
+{% block content %}
+	
+	{% with messages = get_flashed_messages() %}
+		{% if messages %}
+			{% for message in messages %}
+				<div id="flashMessage" class="w3-panel w3-amber w3-container w3-padding" onclick="document.getElementById('flashMessage').style.display='none'">{{ message }}</div>
+			{% endfor %}
+		{% endif %}
+	{% endwith %}
+
+	<div>
+		<button style="display:inline" class="w3-button w3-black" onclick="document.getElementById('addmodal').style.display='block'">+ ADD</button>
+		<form method="post" action="/admin/customers/search" style="display:inline" class="w3-right">
+			<input type="text" name="search" id="search" class="w3-input" placeholder="Enter Keyword" style="width:250px;display:inline;" required>
+			<input type="submit" value="SEARCH" class="w3-button w3-black">
+		</form>
+	</div>
+
+	{% if search != None %}
+		<br>
+		<script>
+			document.getElementById('search').value = "{{ search }}";
+		</script>
+		<div class="w3-container" style="padding:0">
+			<button onclick="location.href = '/admin/customers'" class="w3-button w3-right w3-black" style="width:95px">CLEAR</button>
+		</div>
+	{% endif %}
+	<br>
+	
+	<button style="display:inline" class="w3-button w3-black" onclick="location.href = '/generateCustomer'">Generate Reports</button>
+	<br><br>
+	<div class="w3-responsive">
+	<table class="w3-table-all w3-animate-top w3-hoverable w3-card-4">
+		<tr class="w3-black">
+			{% for h in header %}
+				<th>{{ h | upper }}</th> 
+			{% endfor %}
+			<th></th>
+		</tr>
+		{% for customer in customerlist %}
+			<tr>
+				<td>{{ customer['c_name'] }}</td>
+				<td>{{ customer['c_email'] }}</td>
+				<td>{{ customer['c_address'] }}</td>
+				<td>{{ customer['username'] }}</td>
+				<td>
+					<button style="cursor:pointer;border:none" onclick="deletecustomer('{{ customer['c_id'] }}')">
+						<img width="20px" src="{{ url_for('static',filename='icons/delete.png') }}">
+					</button>
+					<button style="cursor:pointer;border:none" onclick="document.getElementById('updatemodal_{{ customer['c_id'] }}').style.display='block'">
+						<img width="20px" src="{{ url_for('static',filename='icons/edit.png') }}">
+					</button>
+				</td>
+				<!-- Update Modal -->
+				<div id="updatemodal_{{ customer['c_id'] }}" class="w3-modal">
+				  <div class="w3-modal-content w3-animate-top">
+					<div class="w3-container w3-black">
+					  <h3>UPDATE CUSTOMER</h3>
+					  <span onclick="document.getElementById('updatemodal_{{ customer['c_id'] }}').style.display='none'"
+					  class="w3-button w3-display-topright">&times;</span>
+					</div>
+					
+					<div class="w3-container w3-padding-16">
+						<form method="post" action="/admin/updatecustomer/{{ customer['c_id'] }}">
+
+							<label>CUSTOMER NAME</label>
+							<input type="text" name="name" id="name" class="w3-input w3-border" value="{{ customer['c_name'] }}" required>
+							<label>EMAIL</label>
+							<input type="email" name="email" id="email" class="w3-input w3-border" value="{{ customer['c_email'] }}" required>
+							<label>ADDRESS</label>
+							<input type="text" name="address" id="address" class="w3-input w3-border" value="{{ customer['c_address'] }}" required>
+							<label>USERNAME</label>
+							<input type="text" name="username" id="username" class="w3-input w3-border" value="{{ customer['username'] }}" required>
+							<br>
+							<input type="submit" value="UPDATE" class="w3-button w3-black w3-right">
+							<br><br>
+
+						</form>
+					</div>
+				  </div>
+				</div>
+			</tr>
+		{% endfor%}
+	</table>
+	</div>
+	<!-- Add Modal -->
+	<div id="addmodal" class="w3-modal">
+	  <div class="w3-modal-content w3-animate-top">
+		<div class="w3-container w3-black">
+		  <h3>ADD CUSTOMER</h3>
+		  <span onclick="document.getElementById('addmodal').style.display='none'"
+		  class="w3-button w3-display-topright">&times;</span>
+		</div>
+		<div class="w3-container w3-padding-16">
+			<form method="post" action="/admin/addcustomer">
+			
+				<label>CUSTOMER NAME</label>
+				<input type="text" name="name" id="name" class="w3-input w3-border" required>
+				<label>EMAIL</label>
+				<input type="email" name="email" id="email" class="w3-input w3-border" required>
+				<label>ADDRESS</label>
+				<input type="text" name="address" id="address" class="w3-input w3-border" required>
+				<label>USERNAME</label>
+				<input type="text" name="username" id="username" class="w3-input w3-border" required>
+				<label>PASSWORD</label>
+				<input type="text" name="password" id="password" class="w3-input w3-border" required>
+				<br>
+				<input type="submit" value="ADD" class="w3-button w3-black w3-right">
+				<br><br>
+
+			</form>
+		</div>
+	  </div>
+	</div>
+{% endblock %}

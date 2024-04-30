@@ -1,0 +1,179 @@
+{% extends 'base_user.html' %}
+{% block nav %}
+	<a href="{{ url_for('user_items') }}" class="w3-bar-item w3-left w3-button w3-hover-pink">ITEMS</a>
+	<a href="{{ url_for('user_orders') }}" class="w3-bar-item w3-left w3-button w3-hover-pink">ORDERS</a>
+	<a href="{{ url_for('user_cart') }}" class="w3-bar-item w3-left w3-button w3-hover-pink" style="font-weight: bold">CART</a>
+{% endblock %}
+{% block content %}
+
+	{% with messages = get_flashed_messages() %}
+		{% if messages %}
+			{% for message in messages %}
+				<div id="flashMessage" class="w3-panel w3-amber w3-container w3-padding" onclick="document.getElementById('flashMessage').style.display='none'">{{ message }}</div>
+			{% endfor %}
+		{% endif %}
+	{% endwith %}
+	
+	<form id="checkoutForm" method="post">
+		<div class="w3-responsive">
+		<table class="w3-table-all w3-card-4 w3-animate-top w3-hoverable">
+			<tr class="w3-pink">
+				<th></th>
+				{% for h in header %}
+					<th>{{ h | upper }}</th>
+				{% endfor %}
+				<th></th>
+			</tr>
+			{% for item in cart %}
+				<tr>
+					<td>
+						<input type="checkbox" name="checkbox_{{ item['ic_id'] }}" data-id="{{ item['ic_id'] }}">
+					</td>
+					<td>
+						<p id="name{{ item['ic_id'] }}" style="display: inline">{{ item['title'] }}</p>
+					</td>
+					<td>
+						<p style="display: inline">&#x20B1; </p>
+						<p id="price_{{ item['ic_id'] }}" style="display: inline">{{ item['price'] }}</p>
+					</td>
+					<td>
+						<p style="display: inline">&#x20B1; </p>
+						<p id="subtotal_{{ item['ic_id'] }}" style="display: inline">{{ item['total'] }}</p>
+					</td>
+					<td>
+						<input style="width:100px" type="number" name="qty" id="qty_{{ item['ic_id'] }}" min=1 value="{{ item['qty'] }}" oninput="document.getElementById('subtotal_{{ item['ic_id'] }}').innerText = (document.getElementById('qty_{{ item['ic_id'] }}').value * parseFloat('{{ item['price'] }}')).toFixed(2)" required>
+					</td>
+					<td>
+						<button style="cursor:pointer;border:none" onclick="deleteitemincart('{{ item['ic_id'] }}')">
+							<img width="20px" src="{{ url_for('static',filename='icons/delete.png') }}">
+						</button>
+					</td>
+				</tr>
+			{% endfor%}
+		</table>
+		</div>
+		<br>
+		<div class="w3-bar">
+			<div class="w3-left" style="width: 400px;">
+				<input class="w3-input w3-border" type="text" name="ship_address" class="w3-input w3-border" id="ship_address" placeholder="Enter Ship Address" required>
+			</div>
+			<div class="w3-right">
+				<p style="display:inline;">Total: &#x20B1; </p>
+				<p style="display:inline;" id="total" name="total"></p>
+			</div>
+		</div>
+		<input type="submit" name="submit" value="CHECK OUT" class="w3-button w3-black w3-right">
+	</form>
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+	<script>
+	   // Function to handle form submission
+	   function submitForm() {
+	      // Get checked checkboxes
+	      var checkedItems = $('input[name^="checkbox_"]:checked');
+
+	      // Create an array to store the data of checked items
+	      var checkedItemsData = [];
+
+	      // Iterate over checked checkboxes and extract data
+	      checkedItems.each(function() {
+	         var itemId = $(this).data('id');
+	         var qty = $('input[id="qty_' + itemId + '"]').val();
+
+	         checkedItemsData.push({
+	            id: itemId,
+	            quantity: qty,
+	         });
+	      });
+
+	      // Prepare data to be sent to the backend
+	      var formData = {
+	         checkedItems: checkedItemsData,
+	         shipAddress: $('#ship_address').val(), // Get the shipping address
+	         // Add any other data you want to send to the backend
+	      };
+
+	      // Make an AJAX request to the backend
+	      $.ajax({
+	         type: 'POST',
+	         url: '/user/cart/checkout',  // Replace with the actual URL endpoint on your server
+	         contentType: 'application/json;charset=UTF-8',
+	         data: JSON.stringify(formData),
+	         success: function(response) {
+	            // Handle the response from the server
+	            console.log(response);
+	            // You can update the UI or redirect the user as needed
+	            
+	            
+	            if (response.success) {
+		            // Redirect the user to another webpage
+		            window.location.href = '/user/orders';  // Replace with the desired URL
+		        } else {
+		        	window.location.href = '/user/cart';
+		            // Update the UI or handle other scenarios as needed
+		            console.log('Operation failed:', response.message);
+		        }
+
+
+	         },
+	         error: function(error) {
+	            // Handle errors
+	            console.error('Error:', error);
+	         }
+	      });
+	   }
+
+	   // Attach the function to the form submission
+	   $('#checkoutForm').submit(function(event) {
+	      event.preventDefault(); // Prevent the default form submission
+	      submitForm(); // Call your custom function to handle the submission
+	   });
+
+
+	  
+	   // Function to update the total based on checked items
+	   function updateTotal() {
+	      var checkedItems = $('input[name^="checkbox_"]:checked');
+	      var total = 0;
+
+	      checkedItems.each(function() {
+	         var itemId = $(this).data('id');
+	         var qty = $('input[id="qty_' + itemId + '"]').val();
+	         var price = parseFloat($('#price_' + itemId).text()); // Fetch the price from the corresponding element
+
+	         total += qty * price;
+	      });
+
+	      // Update the total element
+	      $('#total').text(total.toFixed(2));
+	   }
+
+	   // Function to handle quantity change
+	   function onQuantityChange(itemId) {
+	      // Update the subtotal for the corresponding item
+	      var qty = $('input[id="qty_' + itemId + '"]').val();
+	      var price = parseFloat($('#price_' + itemId).text());
+	      var subtotal = (qty * price).toFixed(2);
+
+	      $('#subtotal_' + itemId).text(subtotal);
+
+	      // Update the total
+	      updateTotal();
+	   }
+
+
+	   // Attach the function to checkbox changes
+	   $('input[name^="checkbox_"]').change(function() {
+	      updateTotal();
+	   });
+
+	   // Attach the function to quantity changes
+	   $('input[id^="qty_"]').on('input', function() {
+	      var itemId = $(this).data('id');
+	      onQuantityChange(itemId);
+	   });
+
+
+	</script>
+
+{% endblock %}

@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block menu %}
+	{% block nav %}
+	{% endblock %}
+	<a href="{{ url_for('user_logout') }}" class="w3-bar-item w3-right w3-button w3-hover-white">&times; LOGOUT</a>
+{% endblock %}

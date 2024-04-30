@@ -1,0 +1,140 @@
+{% extends 'base_user.html' %}
+{% block nav %}
+	<a href="{{ url_for('user_items') }}" class="w3-bar-item w3-left w3-button w3-hover-white" style="font-weight: bold">ITEMS</a>
+	<a href="{{ url_for('user_orders') }}" class="w3-bar-item w3-left w3-button w3-hover-white">ORDERS</a>
+	<a href="{{ url_for('user_cart') }}" class="w3-bar-item w3-left w3-button w3-hover-white">CART</a>
+{% endblock %}
+{% block content %}
+
+	{% with messages = get_flashed_messages() %}
+		{% if messages %}
+			{% for message in messages %}
+				<div id="flashMessage" class="w3-panel w3-amber w3-container w3-padding" onclick="document.getElementById('flashMessage').style.display='none'">{{ message }}</div>
+			{% endfor %}
+		{% endif %}
+	{% endwith %}
+
+	<div class="w3-bar">
+		<form method="post" action="/user/items/search" class="w3-right">
+			<input type="text" name="search" id="search" class="w3-input" placeholder="Enter Keyword" style="width:250px;display:inline;">
+			<input type="submit" value="SEARCH" class="w3-button w3-black">
+		</form>
+	</div>
+
+	{% if search != None %}
+		<br>
+		<script>
+			document.getElementById('search').value = "{{ search }}";
+		</script>
+		<div class="w3-container" style="padding:0">
+			<button onclick="location.href = '/user/items'" class="w3-button w3-right w3-black" style="width:95px">CLEAR</button>
+		</div>
+	{% endif %}
+	<br>
+	<div class="w3-responsive">
+	<table class="w3-table-all w3-card-4 w3-animate-top w3-hoverable">
+		<tr class="w3-pink">
+			{% for h in header %}
+				<th>{{ h | upper }}</th>
+			{% endfor %}
+			<th></th>
+		</tr>
+		{% for item in itemlist %}
+			<tr>
+				<td>{{ item['title'] }}</td>
+				<td>&#x20B1; {{ item['price'] }}</td>
+				<td>
+					<button style="cursor:pointer;border:none" onclick="document.getElementById('ordermodal_{{ item['i_id'] }}').style.display='block'">
+						<img width="20px" src="{{ url_for('static',filename='icons/order.png') }}">
+					</button>
+					<button style="cursor:pointer;border:none" onclick="document.getElementById('addtocartmodal_{{ item['i_id'] }}').style.display='block'">
+						<img width="20px" src="{{ url_for('static',filename='icons/cart.png') }}">
+					</button>
+				</td>
+				<!-- Order Modal -->
+				<div id="ordermodal_{{ item['i_id'] }}" class="w3-modal">
+				  <div class="w3-modal-content w3-animate-top">
+					<div class="w3-container w3-black">
+					  <h3>ORDER ITEM</h3>
+					  <span onclick="document.getElementById('ordermodal_{{ item['i_id'] }}').style.display='none'"
+					  class="w3-button w3-display-topright">&times;</span>
+					</div>
+					
+					<div class="w3-container w3-padding-16">
+						<form method="post" action="/user/items/order/{{ item['i_id'] }}">
+
+							<div style="display: flex;justify-content: center;">
+								<div style="padding-right: 10px;">
+									<p>ITEM NAME:</p>
+									<p>PRICE:</p>
+								</div>
+								<div style="padding-right: 80px;">
+									<p>{{ item['name'] }}</p>
+									<p>&#x20B1; {{ item['price'] }}</p>
+								</div>
+								<div style="margin-top: 15px;width: 400px;">
+									<label>SHIP ADDRESS</label>
+									<input type="text" name="ship_address" id="ship_address" class="w3-input w3-border" required>
+									<label>QUANTITY</label>
+									<input type="number" name="qty" id="qty_{{ item['i_id'] }}" class="w3-input w3-border" min="1" value="1" oninput="document.getElementById('total_{{ item['i_id'] }}').innerText = (document.getElementById('qty_{{ item['i_id'] }}').value * parseFloat('{{ item['price'] }}')).toFixed(2)" required>
+									<br>
+									<div class="w3-right">
+										<p style="display:inline;">Total: &#x20B1; </p>
+										<p style="display:inline;" id="total_{{ item['i_id'] }}" name="total">{{ item['price'] }}</p>
+									</div>
+								</div>
+							</div>
+							<br>
+							<input type="submit" value="ORDER" class="w3-button w3-black w3-right">
+							<br><br>
+							
+						</form>
+					</div>
+				  </div>
+				</div>
+				
+				<!-- Add to Cart Modal -->
+				<div id="addtocartmodal_{{ item['i_id'] }}" class="w3-modal">
+				  <div class="w3-modal-content w3-animate-top">
+					<div class="w3-container w3-red">
+					  <h3>ADD TO CART</h3>
+					  <span onclick="document.getElementById('addtocartmodal_{{ item['i_id'] }}').style.display='none'"
+					  class="w3-button w3-display-topright">&times;</span>
+					</div>
+					
+					<div class="w3-container w3-padding-16">
+						<form method="post" action="/user/items/addtocart/{{ item['i_id'] }}">
+
+							<div style="display: flex;justify-content: center;">
+								<div style="padding-right: 10px;">
+									<p>ITEM NAME:</p>
+									<p>PRICE:</p>
+								</div>
+								<div style="padding-right: 80px;">
+									<p>{{ item['title'] }}</p>
+									<p>&#x20B1; {{ item['price'] }}</p>
+								</div>
+								<div style="margin-top: 15px;width: 400px;">
+									<label>QUANTITY</label>
+									<input type="number" name="tocartqty" id="tocartqty_{{ item['i_id'] }}" class="w3-input w3-border" min="1" value="1" oninput="document.getElementById('tocarttotal_{{ item['i_id'] }}').innerText = (document.getElementById('tocartqty_{{ item['i_id'] }}').value * parseFloat('{{ item['price'] }}')).toFixed(2)" required>
+									<br>
+									<div class="w3-right">
+										<p style="display:inline;">Total: &#x20B1; </p>
+										<p style="display:inline;" id="tocarttotal_{{ item['i_id'] }}" name="tocarttotal">{{ item['price'] }}</p>
+									</div>
+								</div>
+							</div>
+							<br>
+							<input type="submit" value="ADD TO CART" class="w3-button w3-red w3-right">
+							<br><br>
+							
+						</form>
+					</div>
+				  </div>
+				</div>
+			</tr>
+		{% endfor%}
+	</table>
+	</div>
+	<img width="1000px" class="center" src="{{ url_for('static',filename='pictures/Menu.png') }}">
+{% endblock %}
