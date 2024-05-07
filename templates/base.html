@@ -7,7 +7,8 @@
 		<link rel="stylesheet" href="{{ url_for('static',filename='/css/w3.css')}}">
 		<title>{{ title | upper }}</title>
 	</head>
-	<body>
+	<body class="bg">
+
 		<div class="w3-mobile w3-container w3-padding w3-black w3-card-4">
 			{% block menu %}
 			{% endblock %}
@@ -17,9 +18,7 @@
 			{% block content %}
 			{% endblock %}
 		</div>
-		<hr>
 		<div class="w3-center">SIZZLING ONLINE ORDERING &copy; 2024</div>
-		
 		<script>
 			function deletecustomer(id){
 				var ok = confirm("Do you really want to delete this ? ");

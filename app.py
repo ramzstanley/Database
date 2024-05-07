@@ -380,13 +380,12 @@ def addcustomer():
             name = request.form['name'].strip()
             email = request.form['email'].strip()
             address = request.form['address'].strip()
-            username = request.form['username'].strip()
             password = request.form['password'].strip()
-            valid = checkfields(name,email,address,username,password)
+            valid = checkfields(name,email,address,password)
             if valid:
-                ok = addrecord('Customer',c_name=name,c_email=email,c_address=address,username=username,password=password)
+                ok = addrecord('Customer',c_name=name,email=email,c_address=address,password=password)
                 if ok:
-                    c_id = str(getCustomerId(username)[0]['c_id'])
+                    c_id = str(getCustomerId(email)[0]['c_id'])
                     cart = addrecord('Cart',cart_id=c_id)
                     flash("New Customer Added")
                     return redirect(url_for("admin_customers"))
@@ -410,7 +409,7 @@ def addcustomer():
 @app.route("/admin/customers")
 def admin_customers():
     if 'admin' in session:
-        head = ['customer name','email','address','username','password']
+        head = ['customer name','email','address']
         rows = getall('Customer')
         return render_template("admin_customers.html",title="admin",header=head,customerlist=rows,search=None)
     elif 'user' in session:
@@ -431,16 +430,16 @@ def login()->None:
         return redirect(url_for("user_items"))
     else:
         if request.method == "POST":
-            username:str = request.form['username']
+            email:str = request.form['email']
             password:str = request.form['password']
-            user:list = userlogin('Admin',username=username,password=password)
+            user:list = userlogin('Admin',a_email=email,password=password)
             if len(user) > 0:
-                session['admin'] = username
+                session['admin'] = email
                 return redirect(url_for("admin_customers"))
             else:
-                user:list = userlogin('Customer',username=username,password=password)
+                user:list = userlogin('Customer',email=email,password=password)
                 if len(user) > 0:
-                    session['user'] = username
+                    session['user'] = email
                     return redirect(url_for("user_items"))
                 else:
                     flash("Invalid User!!!")
@@ -459,13 +458,12 @@ def register()->None:
             name:str = request.form['name'].strip()
             email:str = request.form['email'].strip()
             address:str = request.form['address'].strip()
-            username:str = request.form['username'].strip()
             password:str = request.form['password'].strip()
-            valid = checkfields(name,email,address,username,password)
+            valid = checkfields(name,email,address,password)
             if valid:
-                ok:bool = addrecord('Customer',c_name=name,c_email=email,c_address=address,username=username,password=password)
+                ok:bool = addrecord('Customer',c_name=name,email=email,c_address=address,password=password)
                 if ok:
-                    c_id = str(getCustomerId(username)[0]['c_id'])
+                    c_id = str(getCustomerId(email)[0]['c_id'])
                     cart = addrecord('Cart',cart_id=c_id)
                     flash("You are now Registered")
                     return redirect(url_for("login"))

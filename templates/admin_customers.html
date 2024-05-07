@@ -45,9 +45,8 @@
 		{% for customer in customerlist %}
 			<tr>
 				<td>{{ customer['c_name'] }}</td>
-				<td>{{ customer['c_email'] }}</td>
+				<td>{{ customer['email'] }}</td>
 				<td>{{ customer['c_address'] }}</td>
-				<td>{{ customer['username'] }}</td>
 				<td>
 					<button style="cursor:pointer;border:none" onclick="deletecustomer('{{ customer['c_id'] }}')">
 						<img width="20px" src="{{ url_for('static',filename='icons/delete.png') }}">

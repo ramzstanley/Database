@@ -112,8 +112,8 @@ def userlogin(table:str,**kwargs)->list:
     sql:str = f"SELECT * FROM `{table}` WHERE `{keys[0]}` = '{values[0]}' AND `{keys[1]}` = '{values[1]}'"
     return getprocess(sql)
 
-def getCustomerId(username):
-    sql = f"SELECT * FROM `Customer` WHERE `username` = '{username}'"
+def getCustomerId(email):
+    sql = f"SELECT * FROM `Customer` WHERE `email` = '{email}'"
     return getprocess(sql)
 
 def getOrderId(o_date,ship_address,c_id):
