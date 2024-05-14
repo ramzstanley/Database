@@ -189,6 +189,17 @@ def user_items():
         flash("Login Properly!!!")
         return redirect(url_for("login"))
 
+@app.route("/user/dashboard")
+def user_dashboard():
+    if 'user' in session:
+        head = ['customer name','email','address']
+        rows = getall('Customer')
+        return render_template("user_dashboard.html",title="admin",header=head,customerlist=rows,search=None)
+    elif 'user' in session:
+        return redirect(url_for("user_items"))
+    else:
+        flash("Login Properly!!!")
+        return redirect(url_for("login"))
 
 
 
@@ -427,7 +438,7 @@ def login()->None:
     if "admin" in session:
         return redirect(url_for("admin_customers"))
     elif "user" in session:
-        return redirect(url_for("user_items"))
+        return redirect(url_for("user_dashboard"))
     else:
         if request.method == "POST":
             email:str = request.form['email']
@@ -440,9 +451,9 @@ def login()->None:
                 user:list = userlogin('Customer',email=email,password=password)
                 if len(user) > 0:
                     session['user'] = email
-                    return redirect(url_for("user_items"))
+                    return redirect(url_for("user_dashboard"))
                 else:
-                    flash("Invalid User!!!")
+                    flash("Invalid User!!!", "")
                     return redirect(url_for("login"))
         else:
             return render_template("login.html",title="login")
@@ -468,10 +479,10 @@ def register()->None:
                     flash("You are now Registered")
                     return redirect(url_for("login"))
                 else:
-                    flash("Error Creating Account!")
+                    flash("Error Creating Account!", "")
                     return redirect(url_for("register"))
             else:
-                flash("Error Creating Account! All Fields Are Important!")
+                flash("Error Creating Account! All Fields Are Important!", "")
                 return redirect(url_for("register"))
         else:
             return render_template("register.html",title="register")

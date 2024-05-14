@@ -1,5 +1,6 @@
 {% extends 'base_user.html' %}
 {% block nav %}
+	<a href="{{ url_for('user_dashboard') }}" class="w3-bar-item w3-left w3-button w3-hover-white">DASHBOARD</a>
 	<a href="{{ url_for('user_items') }}" class="w3-bar-item w3-left w3-button w3-hover-white" style="font-weight: bold">MENU</a>
 	<a href="{{ url_for('user_orders') }}" class="w3-bar-item w3-left w3-button w3-hover-white">ORDERS</a>
 	<a href="{{ url_for('user_cart') }}" class="w3-bar-item w3-left w3-button w3-hover-white">CART</a>
@@ -33,7 +34,7 @@
 	<br>
 	<div class="w3-responsive">
 	<table class="w3-table-all w3-card-4 w3-animate-top w3-hoverable">
-		<tr class="w3-pink">
+		<tr class="w3-black">
 			{% for h in header %}
 				<th>{{ h | upper }}</th>
 			{% endfor %}
@@ -136,5 +137,8 @@
 		{% endfor%}
 	</table>
 	</div>
+	<br>
+	<br>
+	<br>
 	<img width="1000px" class="center" src="{{ url_for('static',filename='pictures/Menu.png') }}">
 {% endblock %}

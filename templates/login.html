@@ -8,7 +8,7 @@
 	{% with messages = get_flashed_messages() %}
 		{% if messages %}
 			{% for message in messages %}
-				<div id="flashMessage" class="w3-panel w3-green w3-container w3-padding" onclick="document.getElementById('flashMessage').style.display='none'">{{ message }}</div>
+				<div id="flashMessage" class="w3-panel w3-red w3-container w3-padding" onclick="document.getElementById('flashMessage').style.display='none'">{{ message }}</div>
 			{% endfor%}
 		{% endif%}
 	{% endwith%}
