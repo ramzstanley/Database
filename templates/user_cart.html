@@ -1,9 +1,9 @@
 {% extends 'base_user.html' %}
 {% block nav %}
 	<a href="{{ url_for('user_dashboard') }}" class="w3-bar-item w3-left w3-button w3-hover-white">DASHBOARD</a>
-	<a href="{{ url_for('user_items') }}" class="w3-bar-item w3-left w3-button w3-hover-pink">MENU</a>
-	<a href="{{ url_for('user_orders') }}" class="w3-bar-item w3-left w3-button w3-hover-pink">ORDERS</a>
-	<a href="{{ url_for('user_cart') }}" class="w3-bar-item w3-left w3-button w3-hover-pink" style="font-weight: bold">CART</a>
+	<a href="{{ url_for('user_items') }}" class="w3-bar-item w3-left w3-button w3-hover-white">MENU</a>
+	<a href="{{ url_for('user_orders') }}" class="w3-bar-item w3-left w3-button w3-hover-white">ORDERS</a>
+	<a href="{{ url_for('user_cart') }}" class="w3-bar-item w3-left w3-button w3-hover-white" style="font-weight: bold">CART</a>
 {% endblock %}
 {% block content %}
 

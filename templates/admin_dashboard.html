@@ -1,7 +1,24 @@
 {% extends 'base_admin.html' %}
 {% block nav %}
-	<a href="{{ url_for('admin_customers') }}" class="w3-bar-item w3-left w3-button w3-hover-white" style="font-weight: bold">CUSTOMERS</a>
+	<a href="{{ url_for('admin_dashboard') }}" class="w3-bar-item w3-left w3-button w3-hover-white" style="font-weight: bold" >DASHBOARD</a>	
+	<a href="{{ url_for('admin_customers') }}" class="w3-bar-item w3-left w3-button w3-hover-white" >CUSTOMERS</a>
 	<a href="{{ url_for('admin_items') }}" class="w3-bar-item w3-left w3-button w3-hover-white">ITEMS</a>
 {% endblock %}
 {% block content %}
+	<div class="admindashboard w3-container w3-card w3-white" >
+		<div class="header">
+		Dashboard
+		</div>
+		
+		<div class="main-content">
+			<div class="card">
+				<h3>TOTAL CUSTOMERS</h3>
+			<button style="display:inline" class="w3-button w3-black" onclick="location.href = '/generateCustomer'">Generate Reports</button>
+			</div>
+			<div class="card">
+				<h3>SALES</h3>
+			<button style="display:inline" class="w3-button w3-black" onclick="location.href = '/generateSales'">Generate SALES</button>
+			</div>
+		</div>
+	</div>
 {% endblock %}

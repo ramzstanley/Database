@@ -19,11 +19,11 @@ def generateCustomer(table)->list:
 	conn = connect()
 	conn.row_factory = sqlite3.Row
 	cursor = conn.cursor()
-	data = cursor.execute(f"SELECT c_name, c_email, c_address, username FROM {table}")
+	data = cursor.execute(f"SELECT c_name, email, c_address, password  FROM {table}")
 	
 	with open('CustomerList.csv', 'w', newline='') as f:
 		writer = csv.writer(f)
-		writer.writerow(['c_name', 'c_email', 'c_address', 'username'])
+		writer.writerow(['c_name', 'email', 'c_address', 'password'])
 		writer.writerows(data)
 		
 def generateSales():
@@ -31,7 +31,7 @@ def generateSales():
 	conn.row_factory = sqlite3.Row
 	cursor = conn.cursor()
 	data = cursor.execute(f"""
-        SELECT c.c_name, c.c_email, c.c_address, o.o_id, o.o_date, 
+        SELECT c.c_name, c.email, c.c_address, o.o_id, o.o_date, 
                i.title, io.qty, i.price, (io.qty * i.price) AS total
         FROM Customer c
         JOIN Orders o ON c.c_id = o.c_id
@@ -41,7 +41,7 @@ def generateSales():
 	
 	with open('CustomerOrderItemReport.csv', 'w', newline='') as f:
 		writer = csv.writer(f)
-		writer.writerow(['c_name', 'c_email', 'c_address', 'order_id', 'order_date', 
+		writer.writerow(['c_name', 'email', 'c_address', 'order_id', 'order_date', 
                          'item_name', 'quantity', 'price', 'total'])
 		writer.writerows(data)
 

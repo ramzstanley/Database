@@ -201,6 +201,19 @@ def user_dashboard():
         flash("Login Properly!!!")
         return redirect(url_for("login"))
 
+		
+@app.route("/admin/dashboard")
+def admin_dashboard():
+    if 'admin' in session:
+        head = ['customer name','email','address']
+        rows = getall('Customer')
+        return render_template("admin_dashboard.html",title="admin",header=head,customerlist=rows,search=None)
+    elif 'user' in session:
+        return redirect(url_for("user_items"))
+    else:
+        flash("Login Properly!!!")
+        return redirect(url_for("login"))
+
 
 
 #admin/items
@@ -328,8 +341,8 @@ def searchcustomer()->None:
             keyword = request.form['search'].strip()
             valid = checkfields(keyword)
             if valid:
-                head = ['customer name','email','address','username','password']
-                rows = searchlike('Customer',c_name=keyword,c_email=keyword,c_address=keyword,username=keyword,password=keyword)
+                head = ['customer name','email','address','password']
+                rows = searchlike('Customer',c_name=keyword,email=keyword,c_address=keyword,password=keyword)
                 return render_template("admin_customers.html",title="admin",header=head,customerlist=rows,search=keyword)
             else:
                 return redirect(url_for('admin_customers'))
@@ -361,11 +374,9 @@ def updatecustomer(id):
             name = request.form['name'].strip()
             email = request.form['email'].strip()
             address = request.form['address'].strip()
-            username = request.form['username'].strip()
-            password = request.form['password'].strip()
-            valid = checkfields(name,email,address,username,password)
+            valid = checkfields(name,email,address)
             if valid:
-                ok = updaterecord('Customer',c_id=id,c_name=name,c_email=email,c_address=address,username=username,password=password)
+                ok = updaterecord('Customer',c_id=id,c_name=name,email=email,c_address=address)
                 if ok:
                     flash("Customer Updated")
                     return redirect(url_for("admin_customers"))

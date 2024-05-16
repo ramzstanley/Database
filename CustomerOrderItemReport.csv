@@ -1,11 +1,5 @@
-c_name,c_email,c_address,order_id,order_date,item_name,quantity,price,total
-ramz,ramz@gmail.com,mambaling,1,2024-03-03,SIZZLING PORK SISIG,1,99,99
-ramz,ramz@gmail.com,mambaling,2,2024-03-05,SIZZLING PORK SISIG,1,99,99
-ramz,ramz@gmail.com,mambaling,5,2024-03-11,SIZZLING PORK SISIG,1,99,99
-ramz,ramz@gmail.com,mambaling,6,2024-04-29,SIZZLING PORK SISIG,1,99,99
-ramz,ramz@gmail.com,mambaling,7,2024-04-30,SIZZLING PORK SISIG,1,99,99
-ramz,ramz@gmail.com,mambaling,8,2024-04-30,GRILLED PORK BACK RIBS,1,159,159
-ramz,ramz@gmail.com,mambaling,9,2024-04-30,SIZZLING PORK SISIG,20,99,1980
-ramz,ramz@gmail.com,mambaling,10,2024-05-01,SIZZLING PORK SISIG,1,99,99
-ramz,ramz@gmail.com,mambaling,11,2024-05-01,SIZZLING PORK SISIG,1,99,99
-ramz,ramz@gmail.com,mambaling,12,2024-05-01,SIZZLING PORK SISIG,2,99,198
+c_name,email,c_address,order_id,order_date,item_name,quantity,price,total
+yoll yvette,yoll@gmail.com,cogon,15,2024-05-16,SIZZLING PORK SISIG,2,99,198
+yoll yvette,yoll@gmail.com,cogon,16,2024-05-16,GRILLED PORK BACK RIBS,2,159,318
+yoll yvette,yoll@gmail.com,cogon,17,2024-05-16,SIZZLING BEEF,1,110,110
+yoll yvette,yoll@gmail.com,cogon,18,2024-05-16,SIZZLING BULALO,1,159,159

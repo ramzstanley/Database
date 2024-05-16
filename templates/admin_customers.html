@@ -1,5 +1,6 @@
 {% extends 'base_admin.html' %}
 {% block nav %}
+	<a href="{{ url_for('admin_dashboard') }}" class="w3-bar-item w3-left w3-button w3-hover-white">DASHBOARD</a>	
 	<a href="{{ url_for('admin_customers') }}" class="w3-bar-item w3-left w3-button w3-hover-white" style="font-weight: bold">CUSTOMERS</a>
 	<a href="{{ url_for('admin_items') }}" class="w3-bar-item w3-left w3-button w3-hover-white">ITEMS</a>
 {% endblock %}
@@ -32,7 +33,6 @@
 	{% endif %}
 	<br>
 	
-	<button style="display:inline" class="w3-button w3-black" onclick="location.href = '/generateCustomer'">Generate Reports</button>
 	<br><br>
 	<div class="w3-responsive">
 	<table class="w3-table-all w3-animate-top w3-hoverable w3-card-4">
@@ -73,8 +73,6 @@
 							<input type="email" name="email" id="email" class="w3-input w3-border" value="{{ customer['c_email'] }}" required>
 							<label>ADDRESS</label>
 							<input type="text" name="address" id="address" class="w3-input w3-border" value="{{ customer['c_address'] }}" required>
-							<label>USERNAME</label>
-							<input type="text" name="username" id="username" class="w3-input w3-border" value="{{ customer['username'] }}" required>
 							<br>
 							<input type="submit" value="UPDATE" class="w3-button w3-black w3-right">
 							<br><br>
@@ -104,16 +102,29 @@
 				<input type="email" name="email" id="email" class="w3-input w3-border" required>
 				<label>ADDRESS</label>
 				<input type="text" name="address" id="address" class="w3-input w3-border" required>
-				<label>USERNAME</label>
-				<input type="text" name="username" id="username" class="w3-input w3-border" required>
 				<label>PASSWORD</label>
-				<input type="text" name="password" id="password" class="w3-input w3-border" required>
+				<div class="password-container">
+				<input type="password" name="password" id="password" class="w3-input w3-border" required>
+				<i class="eye-icon w3-text-grey" id="togglePassword">👀</i>
+				</div>
 				<br>
 				<input type="submit" value="ADD" class="w3-button w3-black w3-right">
 				<br><br>
-
 			</form>
 		</div>
 	  </div>
 	</div>
+	  <script>
+        const togglePassword = document.getElementById('togglePassword');
+        const password = document.getElementById('password');
+
+        togglePassword.addEventListener('click', function () {
+            // Toggle the type attribute
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+
+            // Toggle the eye icon
+            this.textContent = type === 'password' ? '👀' : '🙈';
+        });
+    </script>
 {% endblock %}
