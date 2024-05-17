@@ -19,11 +19,11 @@ def generateCustomer(table)->list:
 	conn = connect()
 	conn.row_factory = sqlite3.Row
 	cursor = conn.cursor()
-	data = cursor.execute(f"SELECT c_name, email, c_address, password  FROM {table}")
+	data = cursor.execute(f"SELECT c_name, email, c_address FROM {table}")
 	
 	with open('CustomerList.csv', 'w', newline='') as f:
 		writer = csv.writer(f)
-		writer.writerow(['c_name', 'email', 'c_address', 'password'])
+		writer.writerow(['c_name', 'email', 'c_address'])
 		writer.writerows(data)
 		
 def generateSales():

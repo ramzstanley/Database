@@ -447,7 +447,7 @@ def admin_customers():
 @app.route("/login",methods=['GET','POST'])
 def login()->None:
     if "admin" in session:
-        return redirect(url_for("admin_customers"))
+        return redirect(url_for("admin_dashboard"))
     elif "user" in session:
         return redirect(url_for("user_dashboard"))
     else:
@@ -457,7 +457,7 @@ def login()->None:
             user:list = userlogin('Admin',a_email=email,password=password)
             if len(user) > 0:
                 session['admin'] = email
-                return redirect(url_for("admin_customers"))
+                return redirect(url_for("admin_dashboard"))
             else:
                 user:list = userlogin('Customer',email=email,password=password)
                 if len(user) > 0:
